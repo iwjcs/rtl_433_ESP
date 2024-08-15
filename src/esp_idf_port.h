@@ -8,13 +8,13 @@
 struct FakeESP {
   static uint32_t getFreeHeap() { return esp_get_free_heap_size(); }
 };
-static constexpr FakeESP ESP;
+static constexpr FakeESP FakeESPinstance;
 
-#define TaskHandle_t xTaskHandle
-#define QueueHandle_t xQueueHandle
-#define byte int8_t
-#define NOT_AN_INTERRUPT RADIOLIB_NC
+#define TaskHandle_t             xTaskHandle
+#define QueueHandle_t            xQueueHandle
+#define byte                     int8_t
+#define NOT_AN_INTERRUPT         RADIOLIB_NC
 #define digitalPinToInterrupt(x) x
-#define CHANGE		 	    (RISING|FALLING)
+#define CHANGE                   (RISING | FALLING)
 
 #endif

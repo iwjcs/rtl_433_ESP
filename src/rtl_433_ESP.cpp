@@ -26,14 +26,15 @@
 #include "receiver.h"
 #include "signalDecoder.h"
 
-RadioLibHal* hal = new EspHal(5, 19, 27);
-#define millis hal->millis
-#define micros hal->micros
-#define pinMode hal->pinMode
-#define digitalRead hal->digitalRead
-#define digitalWrite hal->digitalWrite
+RadioLibHal* hal = new EspHal((int8_t)RF_MODULE_SCK, (int8_t)RF_MODULE_MISO, (int8_t)RF_MODULE_MOSI);
+#define millis          hal->millis
+#define micros          hal->micros
+#define pinMode         hal->pinMode
+#define digitalRead     hal->digitalRead
+#define digitalWrite    hal->digitalWrite
 #define attachInterrupt hal->attachInterrupt
 #define detachInterrupt hal->detachInterrupt
+
 #undef RADIO_LIB_MODULE
 #define RADIO_LIB_MODULE new Module(hal, RF_MODULE_CS, RF_MODULE_DIO0, RF_MODULE_RST, RF_MODULE_DIO1)
 
@@ -175,6 +176,9 @@ void rtl_433_ESP::initReceiver(byte inputPin, float receiveFrequency) {
 #  ifdef RF_MODULE_INIT_STATUS
   logprintfLn(LOG_INFO, STR_MODULE " SPI Config SCK: %d, MISO: %d, MOSI: %d, CS: %d", RF_MODULE_SCK, RF_MODULE_MISO, RF_MODULE_MOSI, RF_MODULE_CS);
 #  endif
+
+  logprintfLn(LOG_INFO, STR_MODULE " calling newSPI.begin()");
+
   newSPI.begin(RF_MODULE_SCK, RF_MODULE_MISO, RF_MODULE_MOSI, RF_MODULE_CS);
 #endif
 
@@ -183,6 +187,8 @@ void rtl_433_ESP::initReceiver(byte inputPin, float receiveFrequency) {
 #ifdef RF_CC1101
   int state = radio.begin();
 #else
+  logprintfLn(LOG_INFO, STR_MODULE " calling radio.beginFSK()");
+
   int state = radio.beginFSK();
 #endif
   RADIOLIB_STATE(state, "radio.begin()");
@@ -784,7 +790,7 @@ void rtl_433_ESP::getStatus() {
                 "StackHWM",       "", DATA_INT, uxTaskGetStackHighWaterMark(NULL),
                 "RTL_HWM",        "", DATA_INT, uxTaskGetStackHighWaterMark(rtl_433_ReceiverHandle),
                 "DCD_HWM",        "", DATA_INT, uxTaskGetStackHighWaterMark(rtl_433_DecoderHandle),
-                "freeMem",        "", DATA_INT, ESP.getFreeHeap(),
+                "freeMem",        "", DATA_INT, FakeESPinstance.getFreeHeap(),
                 "_enabledReceiver", "", DATA_INT, _enabledReceiver,
                 "receiveMode",    "", DATA_INT, receiveMode,
                 NULL);

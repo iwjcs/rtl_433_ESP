@@ -26,10 +26,9 @@
 #ifndef rtl_433_ESP_H
 #define rtl_433_ESP_H
 
-#include "esp_idf_port.h"
-
 #include <functional>
 
+#include "esp_idf_port.h"
 #include "log.h"
 #include "tools/aprintf.h"
 
@@ -39,8 +38,10 @@
 #endif
 
 // RadioLib Library setup
-
-#define RADIOLIB_LOW_LEVEL
+#ifdef RADIOLIB_LOW_LEVEL
+#  undef RADIOLIB_LOW_LEVEL
+#endif
+#define RADIOLIB_LOW_LEVEL 1
 
 #include <RadioLib.h>
 
@@ -206,8 +207,7 @@
       } else {                                                            \
         logprintfLn(LOG_ERR, STR_MODULE " " FUNCTION " failed, code: %d", \
                     STATEVAR);                                            \
-        while (true)                                                      \
-          ;                                                               \
+        while (true);                                                     \
       }                                                                   \
     }
 #else
@@ -216,8 +216,7 @@
       if ((STATEVAR) != RADIOLIB_ERR_NONE) {                              \
         logprintfLn(LOG_ERR, STR_MODULE " " FUNCTION " failed, code: %d", \
                     STATEVAR);                                            \
-        while (true)                                                      \
-          ;                                                               \
+        while (true);                                                     \
       }                                                                   \
     }
 #endif

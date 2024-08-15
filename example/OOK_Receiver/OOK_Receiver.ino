@@ -43,7 +43,7 @@ void logJson(JsonObject& jsondata) {
 }
 
 void setup() {
-  Serial.begin(921600);
+  Serial.begin(115200);
   delay(1000);
 #ifndef LOG_LEVEL
   LOG_LEVEL_SILENT
@@ -76,12 +76,9 @@ int next = uptime() + 30;
 
 #  ifdef setBitrate
 #    define TEST    "setBitrate" // 17.24 was suggested
-#    define STEP    2
-#    define stepMin 1
-#    define stepMax 300
-// #    define STEP    1
-// #    define stepMin 133
-// #    define stepMax 138
+#    define STEP    2 //1
+#    define stepMin 1 // 133
+#    define stepMax 300 // 138
 #  elif defined(setFreqDev) // 40 kHz was suggested
 #    define TEST    "setFrequencyDeviation"
 #    define STEP    1
@@ -95,12 +92,9 @@ int next = uptime() + 30;
 #      define stepMin 5
 #      define stepMax 250
 #    else
-#      define STEP    5
-#      define stepMin 58
-#      define stepMax 812
-// #      define STEP    0.01
-// #      define stepMin 202.00
-// #      define stepMax 205.00
+#      define STEP    5 // 0.01
+#      define stepMin 58 // 202.00
+#      define stepMax 812 // 205.00
 #    endif
 #  endif
 float step = stepMin;

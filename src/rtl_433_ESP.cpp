@@ -42,7 +42,8 @@ RadioLibHal* hal = new EspHal((int8_t)RF_MODULE_SCK, (int8_t)RF_MODULE_MISO, (in
 
 #if defined(RF_MODULE_SCK) && defined(RF_MODULE_MISO) && \
     defined(RF_MODULE_MOSI) && defined(RF_MODULE_CS)
-#  include <SPI.h>
+//#  include <SPI.h>
+#  include "driver/spi_master.h"
 #  if CONFIG_IDF_TARGET_ESP32C3 || CONFIG_IDF_TARGET_ESP32S3
 SPIClass newSPI(FSPI);
 #  else
